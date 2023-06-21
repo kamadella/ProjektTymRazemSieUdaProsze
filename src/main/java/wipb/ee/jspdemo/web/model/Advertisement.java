@@ -17,9 +17,9 @@ public class Advertisement {
     public Advertisement() {
     }
 
-    public Advertisement(String title, String descriprion, Long id_category) {
+    public Advertisement(String title, String description, Long id_category) {
         this.title = title;
-        this.description = descriprion;
+        this.description = description;
         this.id_category = id_category;
         this.status = false;
     }
@@ -44,8 +44,8 @@ public class Advertisement {
         return description;
     }
 
-    public void setDescription(String descriprion) {
-        this.description = descriprion;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Long getId_category() {

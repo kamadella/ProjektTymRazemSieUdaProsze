@@ -20,8 +20,8 @@
     </tr>
     <tr>
       <td>Opis:</td>
-      <td><input type="text" name="descriprion" value="${fn:escapeXml(descriprion)}" ></td>
-      <td><span class="error">${errors.descriprion}</span></td>
+      <td><input type="text" name="description" value="${fn:escapeXml(description)}" ></td>
+      <td><span class="error">${errors.description}</span></td>
     </tr>
     <tr>
       <td>Id kategorii:</td>

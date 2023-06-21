@@ -46,6 +46,7 @@ public class AdvertisementController extends HttpServlet {
                 handleAdvertisementList(request, response);
                 break;
             case "/advertisement/edit":
+                System.out.println("jestem w case/advertisement/edit :");
                 handleGetEditGet(request, response);
                 break;
             case "/advertisement/remove":
@@ -82,13 +83,16 @@ public class AdvertisementController extends HttpServlet {
     private void handleGetEditGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String s = request.getPathInfo();
         Long id = parseId(s);
+        System.out.println("jestem w handleGetEditGet");
         Advertisement a;
         if (id != null) {
             a = dao.findById(id).orElseThrow(() -> new IllegalStateException("No Advertisement with id "+id));
             request.setAttribute("title",a.getTitle());
             request.setAttribute("description",a.getDescription());
-            request.setAttribute("id Kategorii",a.getId_category());
+            request.setAttribute("id_category",a.getId_category());
         }
+
+        System.out.println("jestem w handleGetEditGet");
         // przekazuje sterowanie do strony jsp zwracającej formularz z książką
         request.getRequestDispatcher("/WEB-INF/views/advertisement/advertisement_form.jsp").forward(request, response);
     }
