@@ -10,18 +10,20 @@ public class Advertisement {
     private Long id;
     private String title;
     private String description;
-    private Long idCategory;
+    @ManyToOne()
+    private Category category;
     private boolean status;
 
     public Advertisement() {
     }
 
-    public Advertisement(String title, String description, Long idCategory) {
+    public Advertisement(String title, String description, Category category) {
         this.title = title;
         this.description = description;
-        this.idCategory = idCategory;
+        this.category = category;
         this.status = false;
     }
+
 
     public Long getId() {
         return id;
@@ -47,12 +49,12 @@ public class Advertisement {
         this.description = description;
     }
 
-    public Long getIdCategory() {
-        return idCategory;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setIdCategory(Long id_category) {
-        this.idCategory = id_category;
+    public void setCategory(Long id_category) {
+        this.category = category;
     }
 
     public boolean isStatus() {

@@ -15,6 +15,7 @@
     <thead>
     <tr>
         <th>Nazwa</th>
+        <th>Id</th>
         <th>Operacje</th>
     </tr>
     </thead>
@@ -24,6 +25,7 @@
         <tr>
                 <%-- fn:escapeXml(value) dodaje kody ucieczki jeśli tekst zwiera znaczniki - zabezpiecza przez atakiem XSS --%>
             <td>${fn:escapeXml(category.name)}</td>
+                    <td>${fn:escapeXml(category.id)}</td>
             <td>
                     <%-- c:url dodaje do url nazwę aplikacji (context root) oraz identifykator sesji jsessionid jeśli sesja jest włączona i brak obsługi ciasteczek --%>
                 <a href="<c:url value='/category/edit/${category.id}'/>">Edytuj</a>,

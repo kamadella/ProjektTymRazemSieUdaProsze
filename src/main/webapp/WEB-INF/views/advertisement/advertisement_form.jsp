@@ -25,8 +25,8 @@
     </tr>
     <tr>
       <td>Id kategorii:</td>
-      <td><input type="number" name="idCategory" value="${fn:escapeXml(idCategory)}" > </td>
-      <td><span class="error">${errors.idCategory}</span></td>
+      <td><input type="text" name="categoryList" value="${fn:escapeXml(categoryList[0].name)}" > </td>
+      <td><span class="error">${errors.categoryList}</span></td>
     </tr>
 
   </table>

@@ -2,7 +2,6 @@ package wipb.ee.jspdemo.web.model;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,6 +12,9 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     private String name;
+
+    @OneToMany(mappedBy = "category", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Advertisement> advertisementList = new LinkedList<Advertisement>();
 
     public Category() {}
     public Category(String name) {
@@ -30,5 +32,18 @@ public class Category {
     }
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void addAdvertisement(Advertisement advertisement){
+        advertisementList.add(advertisement);
+        advertisement.setCategory(this.getId()); // należy pamiętać o ustawieniu powiązania w dwie strony
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "ID=" + getId() +
+                ", name='" + name + '\'' +
+                '}';
     }
 }
