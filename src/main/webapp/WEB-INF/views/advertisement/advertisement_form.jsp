@@ -24,8 +24,14 @@
       <td><span class="error">${errors.description}</span></td>
     </tr>
     <tr>
-      <td>Id kategorii:</td>
-      <td><input type="text" name="categoryList" value="${fn:escapeXml(categoryList[0].name)}" > </td>
+      <td>Kategoria:</td>
+      <td>
+        <select name="selectedOption">
+          <c:forEach items='${categoryList}' var='category'>
+            <option value="${fn:escapeXml(category.name)}">${fn:escapeXml(category.name)}</option>
+          </c:forEach>
+        </select>
+      </td>
       <td><span class="error">${errors.categoryList}</span></td>
     </tr>
 

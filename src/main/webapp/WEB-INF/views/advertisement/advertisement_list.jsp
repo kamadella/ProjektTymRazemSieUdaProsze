@@ -15,7 +15,7 @@
     <tr>
         <th>Tytuł</th>
         <th>Opis</th>
-        <th>Id kategorii</th>
+        <th>Kategoria</th>
         <th>status</th>
         <th>Operacje</th>
     </tr>

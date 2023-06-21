@@ -81,12 +81,12 @@ public class AdvertisementController extends HttpServlet {
         Long id = parseId(s);
         Advertisement a;
         List<Category> categoryList = daoCategory.findAll();
+        System.out.println(categoryList);
         request.setAttribute("categoryList", categoryList);
         if (id != null) {
             a = dao.findById(id).orElseThrow(() -> new IllegalStateException("No Advertisement with id "+id));
             request.setAttribute("title",a.getTitle());
             request.setAttribute("description",a.getDescription());
-            request.setAttribute("idCategory",a.getCategory());
 
         }
 
