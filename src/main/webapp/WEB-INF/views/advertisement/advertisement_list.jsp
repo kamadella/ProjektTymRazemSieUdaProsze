@@ -27,7 +27,7 @@
                 <%-- fn:escapeXml(value) dodaje kody ucieczki jeśli tekst zwiera znaczniki - zabezpiecza przez atakiem XSS --%>
             <td>${fn:escapeXml(advertisement.title)}</td>
             <td>${fn:escapeXml(advertisement.description)}</td>
-            <td>${fn:escapeXml(advertisement.idCategory)}</td>
+            <td>${fn:escapeXml(advertisement.category.name)}</td>
                     <td>${fn:escapeXml(advertisement.status)}</td>
                     <td>
                     <%-- c:url dodaje do url nazwę aplikacji (context root) oraz identifykator sesji jsessionid jeśli sesja jest włączona i brak obsługi ciasteczek --%>

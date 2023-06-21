@@ -33,6 +33,14 @@ public class CategoryDao {
         return Optional.ofNullable(b);
     }
 
+    public List<Category> findByName(String name) {
+        List<Category> cat = em.createNamedQuery("Category.findByName", Category.class)
+                .setParameter("name", name)
+                .getResultList();
+        //em.close();
+        return cat;
+    }
+
     public List<Category> findAll() {
         TypedQuery<Category> q = em.createNamedQuery("Category.findAll", Category.class);
         return q.getResultList();

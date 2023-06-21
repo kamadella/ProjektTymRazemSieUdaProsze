@@ -145,9 +145,9 @@ public class AdvertisementController extends HttpServlet {
         if (categoryName == null) {
             fieldToError.put("categoryList","Pole category nie może być puste");
         }
+        List<Category> cats = daoCategory.findByName(categoryName);
 
-
-        return fieldToError.isEmpty() ?  new Advertisement(title,description,categoryName) : null;
+        return fieldToError.isEmpty() ?  new Advertisement(title,description,cats.get(0)) : null;
     }
 
     private Long parseId(String s) {

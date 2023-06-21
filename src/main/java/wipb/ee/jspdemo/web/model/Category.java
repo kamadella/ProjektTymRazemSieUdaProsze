@@ -7,6 +7,7 @@ import java.util.List;
 
 @Entity
 @NamedQuery(name = "Category.findAll", query = "select c from Category c")
+@NamedQuery(name= "Category.findByName", query="select cat from Category cat where cat.name=:name")
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
