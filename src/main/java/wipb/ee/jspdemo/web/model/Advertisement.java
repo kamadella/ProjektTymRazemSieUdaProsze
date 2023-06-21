@@ -10,7 +10,7 @@ public class Advertisement {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     private String title;
-    private String descriprion;
+    private String description;
     private Long id_category;
     private boolean status;
 
@@ -19,7 +19,7 @@ public class Advertisement {
 
     public Advertisement(String title, String descriprion, Long id_category) {
         this.title = title;
-        this.descriprion = descriprion;
+        this.description = descriprion;
         this.id_category = id_category;
         this.status = false;
     }
@@ -40,12 +40,12 @@ public class Advertisement {
         this.title = title;
     }
 
-    public String getDescriprion() {
-        return descriprion;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescriprion(String descriprion) {
-        this.descriprion = descriprion;
+    public void setDescription(String descriprion) {
+        this.description = descriprion;
     }
 
     public Long getId_category() {

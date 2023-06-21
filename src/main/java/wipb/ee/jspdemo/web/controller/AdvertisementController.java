@@ -86,9 +86,8 @@ public class AdvertisementController extends HttpServlet {
         if (id != null) {
             a = dao.findById(id).orElseThrow(() -> new IllegalStateException("No Advertisement with id "+id));
             request.setAttribute("title",a.getTitle());
-            request.setAttribute("description",a.getDescriprion());
+            request.setAttribute("description",a.getDescription());
             request.setAttribute("id Kategorii",a.getId_category());
-            request.setAttribute("status",a.isStatus());
         }
         // przekazuje sterowanie do strony jsp zwracającej formularz z książką
         request.getRequestDispatcher("/WEB-INF/views/advertisement/advertisement_form.jsp").forward(request, response);
