@@ -4,40 +4,37 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%-- fmt:setLocale konfiguruje ustawienia lokalne dla tej strony na polskie; używane przez fmt:formatNumber przy formatowaniu liczby--%>
 <fmt:setLocale value = "pl_PL"/>
+<!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Ogłoszenia</title>
+    <title>Kategorie</title>
 </head>
 <body>
 <table>
     <thead>
     <tr>
-        <th>Tytuł</th>
-        <th>Opis</th>
-        <th>Id kategorii</th>
-        <th>status</th>
+        <th>Nazwa</th>
+        <th>Id</th>
         <th>Operacje</th>
     </tr>
     </thead>
     <tbody>
     <%-- c:forEach renderuje zawartość dla każdego elementu na liscie, wewnatrz znacznika kolejne elementy będą dostępne pod nazwą wskazaną przez atrybut var --%>
-    <c:forEach items='${advertisementList}' var='advertisement'>
+    <c:forEach items='${categoryList}' var='category'>
         <tr>
                 <%-- fn:escapeXml(value) dodaje kody ucieczki jeśli tekst zwiera znaczniki - zabezpiecza przez atakiem XSS --%>
-            <td>${fn:escapeXml(advertisement.title)}</td>
-            <td>${fn:escapeXml(advertisement.description)}</td>
-            <td>${fn:escapeXml(advertisement.category.name)}</td>
-                    <td>${fn:escapeXml(advertisement.status)}</td>
-                    <td>
+            <td>${fn:escapeXml(category.name)}</td>
+                    <td>${fn:escapeXml(category.id)}</td>
+            <td>
                     <%-- c:url dodaje do url nazwę aplikacji (context root) oraz identifykator sesji jsessionid jeśli sesja jest włączona i brak obsługi ciasteczek --%>
-                <a href="<c:url value='/advertisement/edit/${advertisement.id}'/>">Edytuj</a>,
-                <a href="<c:url value='/advertisement/remove/${advertisement.id}'/>">Usuń</a>
+                <a href="<c:url value='/category/edit/${category.id}'/>">Edytuj</a>,
+                <a href="<c:url value='/category/remove/${category.id}'/>">Usuń</a>
             </td>
         </tr>
     </c:forEach>
     </tbody>
 </table>
-<a href="<c:url value='/advertisement/edit'/>">Dodaj Ogloszenie</a>
+<a href="<c:url value='/category/edit'/>">Dodaj Kategorię</a>
 </body>
 </html>

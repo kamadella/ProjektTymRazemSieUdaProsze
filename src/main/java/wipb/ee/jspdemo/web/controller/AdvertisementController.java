@@ -7,20 +7,15 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import wipb.ee.jspdemo.web.dao.AdvertisementDao;
-import wipb.ee.jspdemo.web.dao.BookDao;
+import wipb.ee.jspdemo.web.dao.CategoryDao;
 import wipb.ee.jspdemo.web.model.Advertisement;
-import wipb.ee.jspdemo.web.model.Book;
+import wipb.ee.jspdemo.web.model.Category;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 @WebServlet(name = "AdvertisementController", urlPatterns = {"/advertisement/list", "/advertisement/edit/*", "/advertisement/remove/*"})
@@ -29,6 +24,8 @@ public class AdvertisementController extends HttpServlet {
 
     @EJB // wstrzykuje referencje do komponentu EJB (BookDao)
     private AdvertisementDao dao;
+    @EJB // wstrzykuje referencje do komponentu EJB (BookDao)
+    private CategoryDao daoCategory;
 
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -46,7 +43,6 @@ public class AdvertisementController extends HttpServlet {
                 handleAdvertisementList(request, response);
                 break;
             case "/advertisement/edit":
-                System.out.println("jestem w case/advertisement/edit :");
                 handleGetEditGet(request, response);
                 break;
             case "/advertisement/remove":
@@ -83,16 +79,17 @@ public class AdvertisementController extends HttpServlet {
     private void handleGetEditGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String s = request.getPathInfo();
         Long id = parseId(s);
-        System.out.println("jestem w handleGetEditGet");
         Advertisement a;
+        List<Category> categoryList = daoCategory.findAll();
+        request.setAttribute("categoryList", categoryList);
         if (id != null) {
             a = dao.findById(id).orElseThrow(() -> new IllegalStateException("No Advertisement with id "+id));
             request.setAttribute("title",a.getTitle());
             request.setAttribute("description",a.getDescription());
-            request.setAttribute("id_category",a.getId_category());
+            request.setAttribute("idCategory",a.getCategory());
+
         }
 
-        System.out.println("jestem w handleGetEditGet");
         // przekazuje sterowanie do strony jsp zwracającej formularz z książką
         request.getRequestDispatcher("/WEB-INF/views/advertisement/advertisement_form.jsp").forward(request, response);
     }
@@ -110,7 +107,7 @@ public class AdvertisementController extends HttpServlet {
             // ustawia wartości przekazane z formularza metodą POST w atrybutach do wyrenderowania na stronie z formularzem
             request.setAttribute("title",request.getParameter("title"));
             request.setAttribute("description",request.getParameter("description"));
-            request.setAttribute("id_category",request.getParameter("id_category"));
+            request.setAttribute("categoryList",request.getParameter("categoryList"));
 
             // przekazuje sterowanie do widoku jsp w celu wyrenderowania formularza z informacją o błędach
             request.getRequestDispatcher("/WEB-INF/views/advertisement/advertisement_form.jsp").forward(request, response);
@@ -135,7 +132,7 @@ public class AdvertisementController extends HttpServlet {
     private Advertisement parseAdvertisement(Map<String,String[]> paramToValue, Map<String,String> fieldToError) {
         String title = paramToValue.get("title")[0];
         String description = paramToValue.get("description")[0];
-        Long id_category = Long.valueOf(paramToValue.get("id_category")[0]);
+        String categoryName = paramToValue.get("categoryList")[0];
 
         if (title == null || title.trim().isEmpty()) {
             fieldToError.put("title","Pole tytuł nie może być puste");
@@ -145,11 +142,12 @@ public class AdvertisementController extends HttpServlet {
             fieldToError.put("description","Pole description nie może być puste");
         }
 
-        if (id_category == null) {
-            fieldToError.put("id_category","Pole id_category nie może być puste");
+        if (categoryName == null) {
+            fieldToError.put("categoryList","Pole category nie może być puste");
         }
+        List<Category> cats = daoCategory.findByName(categoryName);
 
-        return fieldToError.isEmpty() ?  new Advertisement(title,description,id_category) : null;
+        return fieldToError.isEmpty() ?  new Advertisement(title,description,cats.get(0)) : null;
     }
 
     private Long parseId(String s) {

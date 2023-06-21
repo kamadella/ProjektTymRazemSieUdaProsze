@@ -1,36 +1,27 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<!DOCTYPE html>
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>Ogloszenia</title>
+  <title>Kategorie</title>
   <style>.error { color: red; }</style>
 </head>
 <body>
-<h3>Edycja ogloszenia</h3>
+<h3>Edycja Kategorii</h3>
 <%-- komentarz JSP - nie jest rendrowany --%>
 <form method="post">
   <table>
     <tr>
       <td>Tytuł:</td>
       <%-- fn:escapeXml(value) dodaje kody ucieczki jeśli tekst zwiera znaczniki - zabezpiecza przez atakiem XSS --%>
-      <td><input type="text" name="title" value="${fn:escapeXml(title)}" ></td>
+      <td><input type="text" name="name" value="${fn:escapeXml(name)}" ></td>
       <%-- errors zawiera ew. błędy konwersji/walidacji dla poszczególnych pól --%>
-      <td><span class="error">${errors.title}</span></td>
+      <td><span class="error">${errors.name}</span></td>
     </tr>
-    <tr>
-      <td>Opis:</td>
-      <td><input type="text" name="description" value="${fn:escapeXml(description)}" ></td>
-      <td><span class="error">${errors.description}</span></td>
-    </tr>
-    <tr>
-      <td>Id kategorii:</td>
-      <td><input type="text" name="categoryList" value="${fn:escapeXml(categoryList[0].name)}" > </td>
-      <td><span class="error">${errors.categoryList}</span></td>
-    </tr>
-
   </table>
   <input type="submit" value="Save">
 </form>
 </body>
 </html>
+
