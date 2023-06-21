@@ -1,5 +1,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -25,15 +28,14 @@
     </tr>
     <tr>
       <td>Kategoria:</td>
-      <td>
-        <select name="selectedOption">
-          <c:forEach items='${categoryList}' var='category'>
-            <option value="${fn:escapeXml(category.name)}">${fn:escapeXml(category.name)}</option>
-          </c:forEach>
-        </select>
-      </td>
+      <td><select name="selectedOption">
+        <c:forEach items="${categoryList}" var="category">
+          <option value="${category.name}">${category.name}</option>
+        </c:forEach>
+      </select> </td>
       <td><span class="error">${errors.categoryList}</span></td>
     </tr>
+
 
   </table>
   <input type="submit" value="Save">

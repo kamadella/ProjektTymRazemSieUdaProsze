@@ -107,7 +107,7 @@ public class AdvertisementController extends HttpServlet {
             // ustawia wartości przekazane z formularza metodą POST w atrybutach do wyrenderowania na stronie z formularzem
             request.setAttribute("title",request.getParameter("title"));
             request.setAttribute("description",request.getParameter("description"));
-            request.setAttribute("categoryList",request.getParameter("categoryList"));
+            request.setAttribute("categoryList",request.getParameter("selectedOption"));
 
             // przekazuje sterowanie do widoku jsp w celu wyrenderowania formularza z informacją o błędach
             request.getRequestDispatcher("/WEB-INF/views/advertisement/advertisement_form.jsp").forward(request, response);
@@ -132,8 +132,7 @@ public class AdvertisementController extends HttpServlet {
     private Advertisement parseAdvertisement(Map<String,String[]> paramToValue, Map<String,String> fieldToError) {
         String title = paramToValue.get("title")[0];
         String description = paramToValue.get("description")[0];
-        String categoryName = paramToValue.get("categoryList")[0];
-
+        String categoryName = paramToValue.get("selectedOption")[0];
         if (title == null || title.trim().isEmpty()) {
             fieldToError.put("title","Pole tytuł nie może być puste");
         }
@@ -146,7 +145,6 @@ public class AdvertisementController extends HttpServlet {
             fieldToError.put("categoryList","Pole category nie może być puste");
         }
         List<Category> cats = daoCategory.findByName(categoryName);
-
         return fieldToError.isEmpty() ?  new Advertisement(title,description,cats.get(0)) : null;
     }
 
