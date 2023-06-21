@@ -14,8 +14,6 @@ public class User {
     private String password;
     private String email;
 
-    private List<Advertisement> listUserAdvertises = new LinkedList<>();
-
 
     public User() {
     }
@@ -50,11 +48,5 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
-    public List<Advertisement> getAccountOperation() {
-        return listUserAdvertises;
-    }
 
-    public void addAdvertise(Advertisement advert){
-        listUserAdvertises.add(advert);
-    }
 }

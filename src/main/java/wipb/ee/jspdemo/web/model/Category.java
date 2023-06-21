@@ -1,15 +1,13 @@
 package wipb.ee.jspdemo.web.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 @Entity
+@NamedQuery(name = "Category.findAll", query = "select c from Category c")
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

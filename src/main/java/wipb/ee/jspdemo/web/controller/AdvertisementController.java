@@ -38,7 +38,6 @@ public class AdvertisementController extends HttpServlet {
                 handleAdvertisementList(request, response);
                 break;
             case "/advertisement/edit":
-                System.out.println("jestem w case/advertisement/edit :");
                 handleGetEditGet(request, response);
                 break;
             case "/advertisement/remove":
@@ -75,16 +74,14 @@ public class AdvertisementController extends HttpServlet {
     private void handleGetEditGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String s = request.getPathInfo();
         Long id = parseId(s);
-        System.out.println("jestem w handleGetEditGet");
         Advertisement a;
         if (id != null) {
             a = dao.findById(id).orElseThrow(() -> new IllegalStateException("No Advertisement with id "+id));
             request.setAttribute("title",a.getTitle());
             request.setAttribute("description",a.getDescription());
-            request.setAttribute("id_category",a.getIdCategory());
+            request.setAttribute("idCategory",a.getIdCategory());
         }
 
-        System.out.println("jestem w handleGetEditGet");
         // przekazuje sterowanie do strony jsp zwracającej formularz z książką
         request.getRequestDispatcher("/WEB-INF/views/advertisement/advertisement_form.jsp").forward(request, response);
     }
@@ -102,7 +99,7 @@ public class AdvertisementController extends HttpServlet {
             // ustawia wartości przekazane z formularza metodą POST w atrybutach do wyrenderowania na stronie z formularzem
             request.setAttribute("title",request.getParameter("title"));
             request.setAttribute("description",request.getParameter("description"));
-            request.setAttribute("id_category",request.getParameter("id_category"));
+            request.setAttribute("idCategory",request.getParameter("idCategory"));
 
             // przekazuje sterowanie do widoku jsp w celu wyrenderowania formularza z informacją o błędach
             request.getRequestDispatcher("/WEB-INF/views/advertisement/advertisement_form.jsp").forward(request, response);
@@ -127,7 +124,7 @@ public class AdvertisementController extends HttpServlet {
     private Advertisement parseAdvertisement(Map<String,String[]> paramToValue, Map<String,String> fieldToError) {
         String title = paramToValue.get("title")[0];
         String description = paramToValue.get("description")[0];
-        Long id_category = Long.valueOf(paramToValue.get("id_category")[0]);
+        Long idCategory = Long.valueOf(paramToValue.get("idCategory")[0]);
 
         if (title == null || title.trim().isEmpty()) {
             fieldToError.put("title","Pole tytuł nie może być puste");
@@ -137,11 +134,11 @@ public class AdvertisementController extends HttpServlet {
             fieldToError.put("description","Pole description nie może być puste");
         }
 
-        if (id_category == null) {
-            fieldToError.put("id_category","Pole id_category nie może być puste");
+        if (idCategory == null) {
+            fieldToError.put("idCategory","Pole idCategory nie może być puste");
         }
 
-        return fieldToError.isEmpty() ?  new Advertisement(title,description,id_category) : null;
+        return fieldToError.isEmpty() ?  new Advertisement(title,description,idCategory) : null;
     }
 
     private Long parseId(String s) {
