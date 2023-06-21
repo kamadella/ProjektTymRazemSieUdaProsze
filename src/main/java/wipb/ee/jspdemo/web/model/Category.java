@@ -42,7 +42,7 @@ public class Category {
 
     @Override
     public String toString() {
-        return "Account{" +
+        return "Category{" +
                 "ID=" + getId() +
                 ", name='" + name + '\'' +
                 '}';
