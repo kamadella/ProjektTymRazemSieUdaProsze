@@ -7,19 +7,11 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import wipb.ee.jspdemo.web.dao.AdvertisementDao;
-import wipb.ee.jspdemo.web.dao.BookDao;
 import wipb.ee.jspdemo.web.model.Advertisement;
-import wipb.ee.jspdemo.web.model.Book;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -89,7 +81,7 @@ public class AdvertisementController extends HttpServlet {
             a = dao.findById(id).orElseThrow(() -> new IllegalStateException("No Advertisement with id "+id));
             request.setAttribute("title",a.getTitle());
             request.setAttribute("description",a.getDescription());
-            request.setAttribute("id_category",a.getId_category());
+            request.setAttribute("id_category",a.getIdCategory());
         }
 
         System.out.println("jestem w handleGetEditGet");

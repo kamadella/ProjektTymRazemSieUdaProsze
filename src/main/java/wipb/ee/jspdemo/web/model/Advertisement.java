@@ -2,7 +2,6 @@ package wipb.ee.jspdemo.web.model;
 
 import jakarta.persistence.*;
 
-import java.math.BigDecimal;
 @Entity
 @NamedQuery(name = "Advertisement.findAll", query = "select a from Advertisement a")
 public class Advertisement {
@@ -11,16 +10,16 @@ public class Advertisement {
     private Long id;
     private String title;
     private String description;
-    private Long id_category;
+    private Long idCategory;
     private boolean status;
 
     public Advertisement() {
     }
 
-    public Advertisement(String title, String description, Long id_category) {
+    public Advertisement(String title, String description, Long idCategory) {
         this.title = title;
         this.description = description;
-        this.id_category = id_category;
+        this.idCategory = idCategory;
         this.status = false;
     }
 
@@ -48,12 +47,12 @@ public class Advertisement {
         this.description = description;
     }
 
-    public Long getId_category() {
-        return id_category;
+    public Long getIdCategory() {
+        return idCategory;
     }
 
-    public void setId_category(Long id_category) {
-        this.id_category = id_category;
+    public void setIdCategory(Long id_category) {
+        this.idCategory = id_category;
     }
 
     public boolean isStatus() {
