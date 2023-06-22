@@ -1,16 +1,16 @@
 package wipb.ee.jspdemo.web.dao;
 
-import jakarta.ejb.Stateful;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
-import wipb.ee.jspdemo.web.model.Admin;
+import wipb.ee.jspdemo.web.model.Advertisement;
 import wipb.ee.jspdemo.web.model.Category;
 
 import java.util.List;
 import java.util.Optional;
-@Stateful
+
+@Stateless
 public class CategoryDao {
     @PersistenceContext(unitName = "PU")
     private EntityManager em;
@@ -46,4 +46,7 @@ public class CategoryDao {
         return q.getResultList();
     }
 
+    public void setEm(EntityManager em) {
+        this.em = em;
+    }
 }
