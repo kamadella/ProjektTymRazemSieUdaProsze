@@ -2,11 +2,9 @@ package wipb.ee.jspdemo.web.model;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
-public class User {
+@Entity
+@NamedQuery(name = "Vser.findAll", query = "select u from Vser u")
+public class Vser {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
@@ -15,15 +13,21 @@ public class User {
     private String email;
 
 
-    public User() {
+    public Vser() {
     }
-    public User(String login, String password, String email) {
+    public Vser(String login, String password, String email) {
         this.login = login;
         this.password = password;
         this.email = email;
     }
 
+    public Long getId() {
+        return id;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getLogin() {
         return login;
@@ -49,4 +53,13 @@ public class User {
         this.email = email;
     }
 
+    @Override
+    public String toString() {
+        return "Vser{" +
+                "id=" + id +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }

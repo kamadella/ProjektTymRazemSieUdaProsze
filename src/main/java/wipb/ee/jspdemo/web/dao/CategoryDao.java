@@ -1,16 +1,16 @@
 package wipb.ee.jspdemo.web.dao;
 
+import jakarta.ejb.Stateful;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
-import wipb.ee.jspdemo.web.model.Advertisement;
+import wipb.ee.jspdemo.web.model.Admin;
 import wipb.ee.jspdemo.web.model.Category;
 
 import java.util.List;
 import java.util.Optional;
-
-@Stateless
+@Stateful
 public class CategoryDao {
     @PersistenceContext(unitName = "PU")
     private EntityManager em;
@@ -45,4 +45,5 @@ public class CategoryDao {
         TypedQuery<Category> q = em.createNamedQuery("Category.findAll", Category.class);
         return q.getResultList();
     }
+
 }
