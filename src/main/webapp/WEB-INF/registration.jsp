@@ -15,9 +15,9 @@
 <body>
 <h2>Zarejestruj sie tutaj</h2>
 
-<form action="login" method="post">
-  <label for="mail">Adres e-mail:</label><br>
-  <input type="text" id="mail" name="mail"><br>
+<form action="registration" method="post">
+  <label for="email">Adres e-mail:</label><br>
+  <input type="text" id="email" name="email"><br>
   <label for="username">Login:</label><br>
   <input type="text" id="username" name="username"><br>
   <label for="password">Hasło:</label><br>
@@ -28,6 +28,10 @@
 <c:if test="${param.error}">
   Zły e-mail/Login/Haslo.
 </c:if>
+
+<form action="<c:url value='/login'/>" method="post">
+  <input type="submit" value="Zaloguj sie">
+</form>
 
 </body>
 </html>

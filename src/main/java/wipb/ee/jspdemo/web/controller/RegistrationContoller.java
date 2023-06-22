@@ -6,16 +6,17 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import wipb.ee.jspdemo.web.model.Book;
+import wipb.ee.jspdemo.web.dao.UserDao;
+import wipb.ee.jspdemo.web.model.Vser;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
-@WebServlet(name = "RegistrationContoller", urlPatterns ={"/registration"})
+@WebServlet(name = "RegistrationContoller", urlPatterns ={"/registration", "/registration/save"})
 public class RegistrationContoller extends HttpServlet {
-    private final Logger log = Logger.getLogger(BookController.class.getName());
+    private final Logger log = Logger.getLogger(RegistrationContoller.class.getName());
 
     @EJB // wstrzykuje referencje do komponentu EJB (BookDao)
     private UserDao dao;
@@ -34,23 +35,31 @@ public class RegistrationContoller extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String path = request.getServletPath();
-        if (path.equals("/registration")) {
-            handleUserEditPost(request, response);
+        switch (path) {
+            case "/registration":
+                handleUserEditPost(request, response);
+                break;
+            case "/registration/save":
+                response.sendRedirect(request.getContextPath()+ "/registration");
+                break;
         }
+
 
     }
 
     private void handleGetEditGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String s = request.getPathInfo();
         Long id = parseId(s);
-        User u;
+        Vser u;
         if (id != null) {
             u = dao.findById(id).orElseThrow(() -> new IllegalStateException("No User with id "+id));
-            request.setAttribute("name",u.getName());
+            request.setAttribute("username",u.getLogin());
+            request.setAttribute("password",u.getPassword());
+            request.setAttribute("email",u.getEmail());
         }
 
         // przekazuje sterowanie do strony jsp zwracającej formularz z książką
-        request.getRequestDispatcher("/WEB-INF/views/kategorie/category_form.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/registration.jsp").forward(request, response);
     }
 
     private void handleUserEditPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -58,18 +67,18 @@ public class RegistrationContoller extends HttpServlet {
         Long id = parseId(s);
 
         Map<String,String> fieldToError = new HashMap<>();
-        Book b = parseUser(request.getParameterMap(),fieldToError);
+        Vser b = parseUser(request.getParameterMap(),fieldToError);
 
         if (!fieldToError.isEmpty()) {
             // ustawia błędy jako atrybut do wyrenderowania na stronie z formularzem
             request.setAttribute("errors",fieldToError);
             // ustawia wartości przekazane z formularza metodą POST w atrybutach do wyrenderowania na stronie z formularzem
-            request.setAttribute("title",request.getParameter("title"));
-            request.setAttribute("author",request.getParameter("author"));
-            request.setAttribute("price",request.getParameter("price"));
+            request.setAttribute("username",request.getParameter("username"));
+            request.setAttribute("password",request.getParameter("password"));
+            request.setAttribute("email",request.getParameter("email"));
 
             // przekazuje sterowanie do widoku jsp w celu wyrenderowania formularza z informacją o błędach
-            request.getRequestDispatcher("/WEB-INF/views/book/book_form.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/registration.jsp").forward(request, response);
             return;
         }
 
@@ -80,22 +89,22 @@ public class RegistrationContoller extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/login");
     }
 
-    private User parseUser(Map<String,String[]> paramToValue, Map<String,String> fieldToError) {
-        String mail = paramToValue.get("mail")[0];
-        String username = paramToValue.get("username")[0];
+    private Vser parseUser(Map<String,String[]> paramToValue, Map<String,String> fieldToError) {
+        String login = paramToValue.get("username")[0];
         String password = paramToValue.get("password")[0];
+        String email = paramToValue.get("email")[0];
 
-        if (username == null || username.trim().isEmpty()) {
-            fieldToError.put("name","Pole username nie może być puste");
+        if (login == null || login.trim().isEmpty()) {
+            fieldToError.put("login","Pole login nie może być puste");
         }
-        if (mail == null || mail.trim().isEmpty()) {
-            fieldToError.put("mail","Pole mail nie może być puste");
+        if (email == null || email.trim().isEmpty()) {
+            fieldToError.put("email","Pole email nie może być puste");
         }
         if (password == null || password.trim().isEmpty()) {
             fieldToError.put("password","Pole password nie może być puste");
         }
 
-        return fieldToError.isEmpty() ?  new User(username,password,mail) : null;
+        return fieldToError.isEmpty() ?  new Vser(login,password,email, "user") : null;
     }
 
     private Long parseId(String s) {

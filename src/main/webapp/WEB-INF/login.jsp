@@ -20,5 +20,9 @@
     Invalid Login/Hasło.
 </c:if>
 
+<form action="<c:url value='/registration/save'/>" method="post">
+    <input type="submit" value="Zarejestruj sie">
+</form>
+
 </body>
 </html>
