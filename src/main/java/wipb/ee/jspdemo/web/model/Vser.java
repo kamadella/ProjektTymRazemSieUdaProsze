@@ -2,8 +2,12 @@ package wipb.ee.jspdemo.web.model;
 
 import jakarta.persistence.*;
 
+import java.util.LinkedList;
+import java.util.List;
+
 @Entity
 @NamedQuery(name = "Vser.findAll", query = "select u from Vser u")
+@NamedQuery(name= "Vser.findByName", query="select u from Vser u where u.login=:login")
 public class Vser {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -11,8 +15,9 @@ public class Vser {
     private String login;
     private String password;
     private String email;
-
     private String type;
+    @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Advertisement> advertisementList = new LinkedList<Advertisement>();
 
 
     public Vser() {

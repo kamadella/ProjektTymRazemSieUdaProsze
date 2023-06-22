@@ -36,6 +36,7 @@ public class LoginController extends HttpServlet {
             if (user.getLogin().equals(username) && user.getPassword().equals(password)) {
                 HttpSession session = req.getSession();
                 session.setAttribute("isLoggedIn", true);
+                session.setAttribute("id", user.getId());
                 if (user.getType().equals("admin")){
                     session.setAttribute("isAdmin", true);
                 }

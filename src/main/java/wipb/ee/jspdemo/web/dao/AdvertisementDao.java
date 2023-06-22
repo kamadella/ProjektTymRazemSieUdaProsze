@@ -1,12 +1,10 @@
 package wipb.ee.jspdemo.web.dao;
 
 import jakarta.ejb.Stateful;
-import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import wipb.ee.jspdemo.web.model.Advertisement;
-import wipb.ee.jspdemo.web.model.Book;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +35,12 @@ public class AdvertisementDao {
     public List<Advertisement> findAll() {
         TypedQuery<Advertisement> q = em.createNamedQuery("Advertisement.findAll", Advertisement.class);
         return q.getResultList();
+    }
+    public List<Advertisement> findAllAccepted(boolean status) {
+        List<Advertisement> q = em.createNamedQuery("Advertisement.findAllAccepted", Advertisement.class)
+                .setParameter("status", status)
+                .getResultList();
+        return q;
     }
 
     public void setEm(EntityManager em){

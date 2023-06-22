@@ -19,6 +19,7 @@ import wipb.ee.jspdemo.web.model.Category;
 import wipb.ee.jspdemo.web.dao.CategoryDao;
 import wipb.ee.jspdemo.web.model.Advertisement;
 import wipb.ee.jspdemo.web.dao.AdvertisementDao;
+import wipb.ee.jspdemo.web.model.Vser;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DaoTest {
@@ -96,7 +97,9 @@ public class DaoTest {
     public void saveOrUpdateAdvertisement(){
         Category category = new Category("Category");
         categoryDao.saveOrUpdate(category);
-        Advertisement advertisement = new Advertisement("Title", "Description", category);
+        Vser u = new Vser("jawel", "123", "paplo@exp.com", "normal");
+
+        Advertisement advertisement = new Advertisement("Title", "Description", category, u);
         Advertisement savedAdvertisement = advertisementDao.saveOrUpdate(advertisement);
 
         verify(entityManagerMock).persist(advertisement);
@@ -109,7 +112,8 @@ public class DaoTest {
         Long advertisementId = 1L;
         Category category = new Category("Category");
         categoryDao.saveOrUpdate(category);
-        Advertisement advertisement = new Advertisement("Title", "Description", category);
+        Vser u = new Vser("jawel", "123", "paplo@exp.com", "normal");
+        Advertisement advertisement = new Advertisement("Title", "Description", category, u);
         Advertisement savedAdvertisement = advertisementDao.saveOrUpdate(advertisement);
         advertisementDao.remove(advertisementId);
         verify(entityManagerMock).getReference(Advertisement.class, advertisementId);
@@ -121,7 +125,8 @@ public class DaoTest {
         Long advertisementId = 1L;
         Category category = new Category("Category");
         categoryDao.saveOrUpdate(category);
-        Advertisement advertisement = new Advertisement("Title", "Description", category);
+        Vser u = new Vser("jawel", "123", "paplo@exp.com", "normal");
+        Advertisement advertisement = new Advertisement("Title", "Description", category, u);
         advertisementDao.saveOrUpdate(advertisement);
         when(entityManagerMock.find(Advertisement.class, advertisementId)).thenReturn(advertisement);
         Optional<Advertisement> result = advertisementDao.findById(advertisementId);
@@ -133,9 +138,10 @@ public class DaoTest {
     public void findAllAdvertisement() {
         Category category = new Category("Category");
         categoryDao.saveOrUpdate(category);
-        Advertisement advertisement = new Advertisement("Title", "Description", category);
+        Vser u = new Vser("jawel", "123", "paplo@exp.com", "normal");
+        Advertisement advertisement = new Advertisement("Title", "Description", category, u);
         advertisementDao.saveOrUpdate(advertisement);
-        Advertisement advertisement2 = new Advertisement("Title2", "Description2", category);
+        Advertisement advertisement2 = new Advertisement("Title2", "Description2", category, u);
         advertisementDao.saveOrUpdate(advertisement);
         List<Advertisement> createdAdvertisement = new ArrayList();
         createdAdvertisement.add(advertisement);

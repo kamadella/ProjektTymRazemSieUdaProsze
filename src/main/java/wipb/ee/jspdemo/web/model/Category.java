@@ -35,10 +35,6 @@ public class Category {
         this.name = name;
     }
 
-    public void addAdvertisement(Advertisement advertisement){
-        advertisementList.add(advertisement);
-        advertisement.setCategory(this.getId()); // należy pamiętać o ustawieniu powiązania w dwie strony
-    }
 
     @Override
     public String toString() {

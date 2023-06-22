@@ -6,7 +6,6 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import wipb.ee.jspdemo.web.model.Advertisement;
 import wipb.ee.jspdemo.web.model.Category;
-
 import java.util.List;
 import java.util.Optional;
 
