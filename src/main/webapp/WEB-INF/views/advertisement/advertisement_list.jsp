@@ -10,7 +10,7 @@
     <title>Ogłoszenia</title>
 </head>
 <body>
-<form action="logout" method="post">
+<form action="<c:url value='/logout'/>" method="post">
     <input type="submit" value="logout">
 </form>
 <table>
@@ -34,7 +34,8 @@
                     <td>${fn:escapeXml(advertisement.status)}</td>
                     <td>
                     <%-- c:url dodaje do url nazwę aplikacji (context root) oraz identifykator sesji jsessionid jeśli sesja jest włączona i brak obsługi ciasteczek --%>
-                <a href="<c:url value='/advertisement/edit/${advertisement.id}'/>">Edytuj</a>,
+                <a href="<c:url value='/advertisement/edit/${advertisement.id}'/>">Edytuj</a>
+                <a href="<c:url value='/advertisement/accept/${advertisement.id}'/>">Akceptuj ogłoszenie</a>
                 <a href="<c:url value='/advertisement/remove/${advertisement.id}'/>">Usuń</a>
             </td>
         </tr>

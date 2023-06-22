@@ -81,7 +81,7 @@ public class AdvertisementController extends HttpServlet {
         Long id = parseId(s);
         Advertisement a;
         List<Category> categoryList = daoCategory.findAll();
-        System.out.println(categoryList);
+        System.out.println("hendleGetEditGet"+categoryList);
         request.setAttribute("categoryList", categoryList);
         if (id != null) {
             a = dao.findById(id).orElseThrow(() -> new IllegalStateException("No Advertisement with id "+id));
@@ -133,6 +133,7 @@ public class AdvertisementController extends HttpServlet {
         String title = paramToValue.get("title")[0];
         String description = paramToValue.get("description")[0];
         String categoryName = paramToValue.get("selectedOption")[0];
+        System.out.println("Id: "+categoryName);
         if (title == null || title.trim().isEmpty()) {
             fieldToError.put("title","Pole tytuł nie może być puste");
         }
@@ -145,6 +146,7 @@ public class AdvertisementController extends HttpServlet {
             fieldToError.put("categoryList","Pole category nie może być puste");
         }
         List<Category> cats = daoCategory.findByName(categoryName);
+        System.out.println("Kategoria: "+cats);
         return fieldToError.isEmpty() ?  new Advertisement(title,description,cats.get(0)) : null;
     }
 
