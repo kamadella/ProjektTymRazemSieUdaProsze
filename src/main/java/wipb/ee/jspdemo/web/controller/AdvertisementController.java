@@ -6,6 +6,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import wipb.ee.jspdemo.web.dao.AdvertisementDao;
 import wipb.ee.jspdemo.web.dao.CategoryDao;
 import wipb.ee.jspdemo.web.dao.UserDao;
@@ -18,11 +20,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.logging.Logger;
+
 
 @WebServlet(name = "AdvertisementController", urlPatterns = {"/advertisement/list", "/advertisement/edit/*", "/advertisement/remove/*", "/advertisement/accept/*"})
 public class AdvertisementController extends HttpServlet {
-    private final Logger log = Logger.getLogger(AdvertisementController.class.getName());
+    private final Logger log = LogManager.getLogger(AdvertisementController.class.getName());
 
     @EJB // wstrzykuje referencje do komponentu EJB (BookDao)
     private AdvertisementDao dao;
