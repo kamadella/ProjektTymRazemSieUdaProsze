@@ -19,7 +19,9 @@
         <th>Tytuł</th>
         <th>Opis</th>
         <th>Kategoria</th>
-        <th>status</th>
+        <c:if test="${isAdmin == true}">
+            <th>status</th>
+        </c:if>
         <th>Zamieszczone przez</th>
         <th>Operacje</th>
     </tr>
@@ -32,7 +34,9 @@
             <td>${fn:escapeXml(advertisement.title)}</td>
             <td>${fn:escapeXml(advertisement.description)}</td>
             <td>${fn:escapeXml(advertisement.category.name)}</td>
-            <td>${fn:escapeXml(advertisement.status)}</td>
+            <c:if test="${isAdmin == true}">
+                <td>${fn:escapeXml(advertisement.status)}</td>
+            </c:if>
             <td>${fn:escapeXml(advertisement(advertisement.user.login))}</td>
             <td>
                     <%-- c:url dodaje do url nazwę aplikacji (context root) oraz identifykator sesji jsessionid jeśli sesja jest włączona i brak obsługi ciasteczek --%>
