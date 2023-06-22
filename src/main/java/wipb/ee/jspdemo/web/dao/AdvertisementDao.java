@@ -43,6 +43,13 @@ public class AdvertisementDao {
         return q;
     }
 
+    public List<Advertisement> findMyAdverts(Long id) {
+        List<Advertisement> q = em.createNamedQuery("Advertisement.findAllMyAdverts", Advertisement.class)
+                .setParameter("id", id)
+                .getResultList();
+        return q;
+    }
+
     public void setEm(EntityManager em){
         this.em = em;
     }
