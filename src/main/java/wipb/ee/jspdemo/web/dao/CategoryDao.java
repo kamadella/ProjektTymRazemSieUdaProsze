@@ -45,4 +45,8 @@ public class CategoryDao {
         TypedQuery<Category> q = em.createNamedQuery("Category.findAll", Category.class);
         return q.getResultList();
     }
+
+    public void setEm(EntityManager em) {
+        this.em = em;
+    }
 }
