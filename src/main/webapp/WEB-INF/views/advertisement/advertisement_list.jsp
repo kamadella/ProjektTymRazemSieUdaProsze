@@ -10,7 +10,7 @@
     <title>Ogłoszenia</title>
 </head>
 <body>
-<form action="logout" method="post">
+<form action="<c:url value='/logout'/>" method="post">
     <input type="submit" value="logout">
 </form>
 <table>
