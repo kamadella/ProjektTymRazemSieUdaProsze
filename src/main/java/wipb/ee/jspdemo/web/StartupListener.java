@@ -15,7 +15,7 @@ public class StartupListener {
 
     @PostConstruct
     public void initialize(){
-        Vser user = new Vser("admin", "123", "admin@exp.com");
+        Vser user = new Vser("admin", "123", "admin@exp.com", "admin");
         System.out.printf(String.valueOf(user));
         em.persist(user);
 

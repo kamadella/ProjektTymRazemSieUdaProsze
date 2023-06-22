@@ -12,13 +12,16 @@ public class Vser {
     private String password;
     private String email;
 
+    private String type;
+
 
     public Vser() {
     }
-    public Vser(String login, String password, String email) {
+    public Vser(String login, String password, String email, String type) {
         this.login = login;
         this.password = password;
         this.email = email;
+        this.type = type;
     }
 
     public Long getId() {
@@ -51,6 +54,14 @@ public class Vser {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Override
