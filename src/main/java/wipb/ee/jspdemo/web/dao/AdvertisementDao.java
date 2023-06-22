@@ -37,4 +37,8 @@ public class AdvertisementDao {
         TypedQuery<Advertisement> q = em.createNamedQuery("Advertisement.findAll", Advertisement.class);
         return q.getResultList();
     }
+
+    public void setEm(EntityManager em){
+        this.em = em;
+    }
 }
