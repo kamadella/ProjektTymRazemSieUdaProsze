@@ -10,6 +10,9 @@
     <title>Ogłoszenia</title>
 </head>
 <body>
+<form action="logout" method="post">
+    <input type="submit" value="logout">
+</form>
 <table>
     <thead>
     <tr>
