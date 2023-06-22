@@ -20,7 +20,7 @@ public class AuthenticationFilter implements Filter {
         HttpServletResponse resp = (HttpServletResponse) servletResponse;
 
         String action = req.getServletPath();
-        if("/".equals(action) || "/login".equals(action) || "/login.jsp".equals(action)){
+        if("/".equals(action) || "/login".equals(action) || "/login/return".equals(action) ||  "/registration.jsp".equals(action) || "/registration/save".equals(action)|| "/registration".equals(action)){
             filterChain.doFilter(servletRequest, servletResponse);
         } else{
             Object isLoggedObj = req.getSession().getAttribute("isLoggedIn");
