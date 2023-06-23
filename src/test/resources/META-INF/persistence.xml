@@ -5,7 +5,9 @@
              version="3.0">
     <persistence-unit name="PU" transaction-type="JTA">
         <jta-data-source>java:global/DemoDataSource</jta-data-source>
-        <class>wipb.ee.jspdemo.web.model.Book</class>
+        <class>wipb.ee.jspdemo.web.model.Advertisement</class>
+        <class>wipb.ee.jspdemo.web.model.Category</class>
+        <class>wipb.ee.jspdemo.web.model.Vser</class>
         <properties>
             <property name="jakarta.persistence.schema-generation.database.action" value="create"/>
             <property name="eclipselink.logging.level" value="FINE" />

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @NamedQuery(name = "Advertisement.findAll", query = "select a from Advertisement a")
+@NamedQuery(name = "Advertisement.findAllAccepted", query = "select a from Advertisement a where a.status=:status")
 public class Advertisement {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -12,15 +13,18 @@ public class Advertisement {
     private String description;
     @ManyToOne()
     private Category category;
+    @ManyToOne()
+    private Vser user;
     private boolean status;
 
     public Advertisement() {
     }
 
-    public Advertisement(String title, String description, Category category) {
+    public Advertisement(String title, String description, Category category, Vser user) {
         this.title = title;
         this.description = description;
         this.category = category;
+        this.user = user;
         this.status = false;
     }
 
@@ -53,7 +57,7 @@ public class Advertisement {
         return category;
     }
 
-    public void setCategory(Long id_category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
 
@@ -65,6 +69,11 @@ public class Advertisement {
         this.status = status;
     }
 
+    public Vser getUser() {
+        return user;
+    }
 
-
+    public void setUser(Vser user) {
+        this.user = user;
+    }
 }

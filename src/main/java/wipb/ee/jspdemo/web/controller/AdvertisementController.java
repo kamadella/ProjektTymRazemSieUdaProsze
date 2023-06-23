@@ -6,26 +6,32 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import wipb.ee.jspdemo.web.dao.AdvertisementDao;
 import wipb.ee.jspdemo.web.dao.CategoryDao;
+import wipb.ee.jspdemo.web.dao.UserDao;
 import wipb.ee.jspdemo.web.model.Advertisement;
 import wipb.ee.jspdemo.web.model.Category;
+import wipb.ee.jspdemo.web.model.Vser;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.logging.Logger;
 
-@WebServlet(name = "AdvertisementController", urlPatterns = {"/advertisement/list", "/advertisement/edit/*", "/advertisement/remove/*"})
+
+@WebServlet(name = "AdvertisementController", urlPatterns = {"/advertisement/list", "/advertisement/edit/*", "/advertisement/remove/*", "/advertisement/accept/*"})
 public class AdvertisementController extends HttpServlet {
-    private final Logger log = Logger.getLogger(AdvertisementController.class.getName());
+    private final Logger log = LogManager.getLogger(AdvertisementController.class.getName());
 
     @EJB // wstrzykuje referencje do komponentu EJB (BookDao)
     private AdvertisementDao dao;
     @EJB // wstrzykuje referencje do komponentu EJB (BookDao)
     private CategoryDao daoCategory;
+    @EJB
+    private UserDao daoUser;
 
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -62,17 +68,29 @@ public class AdvertisementController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String path = request.getServletPath();
-        if (path.equals("/advertisement/edit")) {
-            handleAdvertisementEditPost(request, response);
+        switch (path) {
+            case "/advertisement/edit":
+                handleAdvertisementEditPost(request, response);
+                break;
+            case "/advertisement/accept":
+                handleAdvertisementAcceptPOST(request, response);
+                break;
         }
     }
 
     private void handleAdvertisementList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // wczytuje listę książek z bazy
-        List<Advertisement> advertisements = dao.findAll();
-        // ustawia listę książek jako atrybut pod nazwą "bookList" dostępny na stronie jsp
+
+        Object isAdmin = request.getSession().getAttribute("isAdmin");
+        boolean isVdmin = (boolean) isAdmin;
+        List<Advertisement> advertisements;
+        if (isVdmin) {
+            advertisements = dao.findAll();
+        }else{
+            advertisements = dao.findAllAccepted(true);
+        }
+        request.setAttribute("id", request.getSession().getAttribute("id"));
+        request.setAttribute("isAdmin", request.getSession().getAttribute("isAdmin"));
         request.setAttribute("advertisementList", advertisements);
-        // przekazuje sterowanie do strony jsp która renderuje listę książek
         request.getRequestDispatcher("/WEB-INF/views/advertisement/advertisement_list.jsp").forward(request, response);
     }
 
@@ -99,7 +117,7 @@ public class AdvertisementController extends HttpServlet {
         Long id = parseId(s);
 
         Map<String,String> fieldToError = new HashMap<>();
-        Advertisement a = parseAdvertisement(request.getParameterMap(),fieldToError);
+        Advertisement a = parseAdvertisement(request.getParameterMap(),fieldToError, request);
 
         if (!fieldToError.isEmpty()) {
             // ustawia błędy jako atrybut do wyrenderowania na stronie z formularzem
@@ -121,6 +139,15 @@ public class AdvertisementController extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/advertisement/list");
     }
 
+    private void handleAdvertisementAcceptPOST(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String s = request.getPathInfo();
+        Long id = parseId(s);
+        Advertisement a = dao.findById(id).get();
+        a.setStatus(true);
+        dao.saveOrUpdate(a);
+        response.sendRedirect(request.getContextPath() + "/advertisement/list");
+    }
+
     private void handleAdvertisementRemove(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String s = request.getPathInfo();
         Long id = parseId(s);
@@ -129,11 +156,11 @@ public class AdvertisementController extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/advertisement/list");
     }
 
-    private Advertisement parseAdvertisement(Map<String,String[]> paramToValue, Map<String,String> fieldToError) {
+    private Advertisement parseAdvertisement(Map<String,String[]> paramToValue, Map<String,String> fieldToError, HttpServletRequest request) {
         String title = paramToValue.get("title")[0];
         String description = paramToValue.get("description")[0];
         String categoryName = paramToValue.get("selectedOption")[0];
-        System.out.println("Id: "+categoryName);
+
         if (title == null || title.trim().isEmpty()) {
             fieldToError.put("title","Pole tytuł nie może być puste");
         }
@@ -146,8 +173,10 @@ public class AdvertisementController extends HttpServlet {
             fieldToError.put("categoryList","Pole category nie może być puste");
         }
         List<Category> cats = daoCategory.findByName(categoryName);
-        System.out.println("Kategoria: "+cats);
-        return fieldToError.isEmpty() ?  new Advertisement(title,description,cats.get(0)) : null;
+
+        Optional<Vser> u = daoUser.findById(((Long)request.getSession().getAttribute("id")).longValue());
+
+        return fieldToError.isEmpty() ?  new Advertisement(title,description,cats.get(0), u.get()) : null;
     }
 
     private Long parseId(String s) {

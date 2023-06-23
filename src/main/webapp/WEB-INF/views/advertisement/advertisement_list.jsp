@@ -31,12 +31,16 @@
             <td>${fn:escapeXml(advertisement.title)}</td>
             <td>${fn:escapeXml(advertisement.description)}</td>
             <td>${fn:escapeXml(advertisement.category.name)}</td>
-                    <td>${fn:escapeXml(advertisement.status)}</td>
-                    <td>
+            <td>${fn:escapeXml(advertisement.status)}</td>
+            <td>
                     <%-- c:url dodaje do url nazwę aplikacji (context root) oraz identifykator sesji jsessionid jeśli sesja jest włączona i brak obsługi ciasteczek --%>
+                <c:if test="${id == advertisement.user.getId() || isAdmin == true}">
                 <a href="<c:url value='/advertisement/edit/${advertisement.id}'/>">Edytuj</a>
-                <a href="<c:url value='/advertisement/accept/${advertisement.id}'/>">Akceptuj ogłoszenie</a>
                 <a href="<c:url value='/advertisement/remove/${advertisement.id}'/>">Usuń</a>
+                </c:if>
+                <c:if test="${isAdmin == true && advertisement.status == false}">
+                    <a href="<c:url value='/advertisement/accept/${advertisement.id}'/>">Akceptuj ogłoszenie</a>
+                </c:if>
             </td>
         </tr>
     </c:forEach>
