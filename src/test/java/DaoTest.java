@@ -1,6 +1,8 @@
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import org.h2.engine.User;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,6 +17,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import static org.mockito.Mockito.*;
+
+import wipb.ee.jspdemo.web.dao.UserDao;
 import wipb.ee.jspdemo.web.model.Category;
 import wipb.ee.jspdemo.web.dao.CategoryDao;
 import wipb.ee.jspdemo.web.model.Advertisement;
@@ -32,6 +36,7 @@ public class DaoTest {
     private CategoryDao categoryDao;
 
     private AdvertisementDao advertisementDao;
+    private UserDao userDao;
 
     @Before
     public void setup() {
@@ -40,6 +45,8 @@ public class DaoTest {
         categoryDao.setEm(entityManagerMock);
         advertisementDao = new AdvertisementDao();
         advertisementDao.setEm(entityManagerMock);
+        userDao = new UserDao();
+        userDao.setEm(entityManagerMock);
     }
 
     @Test
@@ -151,6 +158,24 @@ public class DaoTest {
         when(queryMock.getResultList()).thenReturn(createdAdvertisement);
         List<Advertisement> foundAdvertisements = advertisementDao.findAll();
         assertEquals(createdAdvertisement, foundAdvertisements);
+    }
+
+    @Test
+    public void saveOrUpdateVser(){
+        Vser user = new Vser("abc", "abc", "abc", "admin");
+        Vser savedUser = userDao.saveOrUpdate(user);
+        verify(entityManagerMock).persist(user);
+        assertEquals(user, savedUser);
+    }
+
+    @Test
+    public void removeVser(){
+        Long userId = 1L;
+
+        userDao.remove(userId);
+
+        verify(entityManagerMock).getReference(Vser.class, userId);
+        verify(entityManagerMock).remove(any());
     }
 }
 

@@ -46,6 +46,7 @@
                 </c:if>
                 <c:if test="${isAdmin == true && advertisement.status == false}">
                     ,<a href="<c:url value='/advertisement/accept/${advertisement.id}'/>">Akceptuj ogłoszenie</a>
+
                 </c:if>
             </td>
         </tr>

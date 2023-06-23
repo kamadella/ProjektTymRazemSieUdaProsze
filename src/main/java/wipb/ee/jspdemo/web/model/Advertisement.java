@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 @NamedQuery(name = "Advertisement.findAll", query = "select a from Advertisement a")
 @NamedQuery(name = "Advertisement.findAllAccepted", query = "select a from Advertisement a where a.status=:status")
 @NamedQuery(name = "Advertisement.findAllMyAdverts", query = "select a from Advertisement a where a.user.id=:id")
+
 public class Advertisement {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

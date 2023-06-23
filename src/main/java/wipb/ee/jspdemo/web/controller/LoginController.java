@@ -13,7 +13,7 @@ import wipb.ee.jspdemo.web.model.Vser;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "LoginController", urlPatterns = {"/login", "/login/admin", "/login/return"})
+@WebServlet(name = "LoginController", urlPatterns = {"/login", "/login/admin"})
 public class LoginController extends HttpServlet {
 
     @EJB
@@ -21,24 +21,16 @@ public class LoginController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String path = req.getServletPath();
-        switch (path) {
-            case "/login":
-                req.getRequestDispatcher("/WEB-INF/login.jsp").forward(req, resp);
-                break;
-        }
+        req.getRequestDispatcher("/WEB-INF/login.jsp").forward(req, resp);
 
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String path = req.getServletPath();
-        switch (path) {
-            case "/login":
-                String username = req.getParameter("username");
-                String password = req.getParameter("password");
+        String username = req.getParameter("username");
+        String password = req.getParameter("password");
 
-                List<Vser> users = userDao.findAll();
+        List<Vser> users = userDao.findAll();
 
         for (Vser user : users) {
             if (user.getLogin().equals(username) && user.getPassword().equals(password)) {
@@ -70,14 +62,17 @@ public class LoginController extends HttpServlet {
                         resp.sendRedirect("/ee-jspdemo-web-1.0/advertisement/list"); //this page should be only acccessed after login
                         return;
                     }
+
                 }
-
-                resp.sendRedirect("login?error=true");
-                break;
-            case "login/return":
-                resp.sendRedirect(req.getContextPath()+ "/login");
-                break;
+                else{
+                    session.setAttribute("isAdmin", false);
+                }
+                session.setAttribute("username", username);
+                resp.sendRedirect("/ee-jspdemo-web-1.0/advertisement/list"); //this page should be only acccessed after login
+                return;
             }
+        }
 
+        resp.sendRedirect("login?error=true");
     }
 }
