@@ -36,8 +36,33 @@ public class LoginController extends HttpServlet {
             if (user.getLogin().equals(username) && user.getPassword().equals(password)) {
                 HttpSession session = req.getSession();
                 session.setAttribute("isLoggedIn", true);
+                session.setAttribute("id", user.getId());
                 if (user.getType().equals("admin")){
                     session.setAttribute("isAdmin", true);
+                }
+                else{
+                    session.setAttribute("isAdmin", false);
+                }
+                session.setAttribute("username", username);
+                resp.sendRedirect("/ee-jspdemo-web-1.0/advertisement/list"); //this page should be only acccessed after login
+                return;
+            }
+        }
+                for (Vser user : users) {
+                    if (user.getLogin().equals(username) && user.getPassword().equals(password)) {
+                        HttpSession session = req.getSession();
+                        session.setAttribute("isLoggedIn", true);
+                        if (user.getType().equals("admin")){
+                            session.setAttribute("isAdmin", true);
+                        }
+                        else{
+                            session.setAttribute("isAdmin", false);
+                        }
+                        session.setAttribute("username", username);
+                        resp.sendRedirect("/ee-jspdemo-web-1.0/advertisement/list"); //this page should be only acccessed after login
+                        return;
+                    }
+
                 }
                 else{
                     session.setAttribute("isAdmin", false);

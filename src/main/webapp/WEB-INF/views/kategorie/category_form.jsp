@@ -22,6 +22,8 @@
   </table>
   <input type="submit" value="Save">
 </form>
+<br>
+<a href="<c:url value='/category/list'/>">Lista Kategorii</a>
 </body>
 </html>
 

@@ -22,7 +22,8 @@ import java.util.Map;
 import java.util.Optional;
 
 
-@WebServlet(name = "AdvertisementController", urlPatterns = {"/advertisement/list", "/advertisement/edit/*", "/advertisement/remove/*", "/advertisement/accept/*"})
+@WebServlet(name = "AdvertisementController", urlPatterns = {"/advertisement/list", "/advertisement/edit/*", "/advertisement/remove/*", "/advertisement/accept/*", "/advertisement/myadverts/*"})
+
 public class AdvertisementController extends HttpServlet {
     private final Logger log = LogManager.getLogger(AdvertisementController.class.getName());
 
@@ -54,6 +55,13 @@ public class AdvertisementController extends HttpServlet {
             case "/advertisement/remove":
                 handleAdvertisementRemove(request, response);
                 break;
+            case "/advertisement/accept":
+                handleAdvertisementAccept(request, response);
+                break;
+            case "/advertisement/myadverts":
+                handleAdvertisementMyAdverts(request, response);
+                break;
+
         }
     }
 
@@ -72,9 +80,11 @@ public class AdvertisementController extends HttpServlet {
             case "/advertisement/edit":
                 handleAdvertisementEditPost(request, response);
                 break;
+
             case "/advertisement/accept":
                 handleAdvertisementAcceptPOST(request, response);
                 break;
+
         }
     }
 
@@ -94,13 +104,21 @@ public class AdvertisementController extends HttpServlet {
         request.getRequestDispatcher("/WEB-INF/views/advertisement/advertisement_list.jsp").forward(request, response);
     }
 
+    private void handleAdvertisementMyAdverts(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        List<Advertisement> advertisements = dao.findMyAdverts(((Long)request.getSession().getAttribute("id")).longValue());
+        request.setAttribute("advertisementList", advertisements);
+        request.getRequestDispatcher("/WEB-INF/views/advertisement/my_advertisement.jsp").forward(request, response);
+    }
+
     private void handleGetEditGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String s = request.getPathInfo();
         Long id = parseId(s);
         Advertisement a;
+
         List<Category> categoryList = daoCategory.findAll();
-        System.out.println("hendleGetEditGet"+categoryList);
         request.setAttribute("categoryList", categoryList);
+
         if (id != null) {
             a = dao.findById(id).orElseThrow(() -> new IllegalStateException("No Advertisement with id "+id));
             request.setAttribute("title",a.getTitle());
@@ -136,6 +154,15 @@ public class AdvertisementController extends HttpServlet {
         dao.saveOrUpdate(a);
 
         // po udanej konwersji/walidacji i zapisie obiektu użytkownik jest przekierowywany (przez HTTP Redirect) na stronę z listą książek
+        response.sendRedirect(request.getContextPath() + "/advertisement/myadverts");
+    }
+
+    private void handleAdvertisementAccept(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String s = request.getPathInfo();
+        Long id = parseId(s);
+        Advertisement a = dao.findById(id).get();
+        a.setStatus(true);
+        dao.saveOrUpdate(a);
         response.sendRedirect(request.getContextPath() + "/advertisement/list");
     }
 

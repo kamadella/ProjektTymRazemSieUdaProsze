@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 @Entity
 @NamedQuery(name = "Advertisement.findAll", query = "select a from Advertisement a")
 @NamedQuery(name = "Advertisement.findAllAccepted", query = "select a from Advertisement a where a.status=:status")
+@NamedQuery(name = "Advertisement.findAllMyAdverts", query = "select a from Advertisement a where a.user.id=:id")
+
 public class Advertisement {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -61,7 +63,7 @@ public class Advertisement {
         this.category = category;
     }
 
-    public boolean isStatus() {
+    public boolean getStatus() {
         return status;
     }
 

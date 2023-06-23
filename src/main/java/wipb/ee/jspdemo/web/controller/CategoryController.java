@@ -33,16 +33,20 @@ public class CategoryController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String path = request.getServletPath();
-        switch (path) {
-            case "/category/list":
-                handleCategoryList(request, response);
-                break;
-            case "/category/edit":
-                handleGetEditGet(request, response);
-                break;
-            case "/category/remove":
-                handleCategoryRemove(request, response);
-                break;
+        if ((boolean) request.getSession().getAttribute("isAdmin")) {
+            switch (path) {
+                case "/category/list":
+                    handleCategoryList(request, response);
+                    break;
+                case "/category/edit":
+                    handleGetEditGet(request, response);
+                    break;
+                case "/category/remove":
+                    handleCategoryRemove(request, response);
+                    break;
+            }
+        }else{
+            response.sendRedirect("/ee-jspdemo-web-1.0/login");
         }
     }
 
