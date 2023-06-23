@@ -27,27 +27,30 @@ public class LoginController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String username = req.getParameter("username");
-        String password = req.getParameter("password");
+        String path = req.getServletPath();
+        switch (path) {
+            case "/login":
+                String username = req.getParameter("username");
+                String password = req.getParameter("password");
 
-        List<Vser> users = userDao.findAll();
+                List<Vser> users = userDao.findAll();
 
-        for (Vser user : users) {
-            if (user.getLogin().equals(username) && user.getPassword().equals(password)) {
-                HttpSession session = req.getSession();
-                session.setAttribute("isLoggedIn", true);
-                session.setAttribute("id", user.getId());
-                if (user.getType().equals("admin")){
-                    session.setAttribute("isAdmin", true);
+                for (Vser user : users) {
+                    if (user.getLogin().equals(username) && user.getPassword().equals(password)) {
+                        HttpSession session = req.getSession();
+                        session.setAttribute("isLoggedIn", true);
+                        session.setAttribute("id", user.getId());
+                        if (user.getType().equals("admin")){
+                            session.setAttribute("isAdmin", true);
+                        }
+                        else{
+                            session.setAttribute("isAdmin", false);
+                        }
+                        session.setAttribute("username", username);
+                        resp.sendRedirect("/ee-jspdemo-web-1.0/advertisement/list"); //this page should be only acccessed after login
+                        return;
+                    }
                 }
-                else{
-                    session.setAttribute("isAdmin", false);
-                }
-                session.setAttribute("username", username);
-                resp.sendRedirect("/ee-jspdemo-web-1.0/advertisement/list"); //this page should be only acccessed after login
-                return;
-            }
-        }
                 for (Vser user : users) {
                     if (user.getLogin().equals(username) && user.getPassword().equals(password)) {
                         HttpSession session = req.getSession();
@@ -62,17 +65,14 @@ public class LoginController extends HttpServlet {
                         resp.sendRedirect("/ee-jspdemo-web-1.0/advertisement/list"); //this page should be only acccessed after login
                         return;
                     }
+                }
 
-                }
-                else{
-                    session.setAttribute("isAdmin", false);
-                }
-                session.setAttribute("username", username);
-                resp.sendRedirect("/ee-jspdemo-web-1.0/advertisement/list"); //this page should be only acccessed after login
-                return;
-            }
+                resp.sendRedirect("login?error=true");
+                break;
+            case "login/return":
+                resp.sendRedirect(req.getContextPath()+ "/login");
+                break;
         }
 
-        resp.sendRedirect("login?error=true");
     }
 }

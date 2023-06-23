@@ -15,7 +15,6 @@
     <thead>
     <tr>
         <th>Nazwa</th>
-        <th>Id</th>
         <th>Operacje</th>
     </tr>
     </thead>

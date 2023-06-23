@@ -1,6 +1,12 @@
 package wipb.ee.jspdemo.web.controller;
 
 import jakarta.ejb.EJB;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.mail.Session;
+import jakarta.mail.Transport;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -16,10 +22,9 @@ import wipb.ee.jspdemo.web.model.Category;
 import wipb.ee.jspdemo.web.model.Vser;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.net.Authenticator;
+import java.net.PasswordAuthentication;
+import java.util.*;
 
 
 @WebServlet(name = "AdvertisementController", urlPatterns = {"/advertisement/list", "/advertisement/edit/*", "/advertisement/remove/*", "/advertisement/accept/*", "/advertisement/myadverts/*"})
@@ -34,6 +39,7 @@ public class AdvertisementController extends HttpServlet {
     @EJB
     private UserDao daoUser;
 
+
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -47,6 +53,8 @@ public class AdvertisementController extends HttpServlet {
         String path = request.getServletPath();
         switch (path) {
             case "/advertisement/list":
+                sendMail("kamilaaadamska@gmail.com");
+                System.out.println("njofdsnfodsnfsdonjfsdonfds");
                 handleAdvertisementList(request, response);
                 break;
             case "/advertisement/edit":
@@ -173,6 +181,51 @@ public class AdvertisementController extends HttpServlet {
         a.setStatus(true);
         dao.saveOrUpdate(a);
         response.sendRedirect(request.getContextPath() + "/advertisement/list");
+    }
+
+    private void sendMail(String recipientEmail ){
+// Dane do konta e-mail
+        String senderEmail = "javaproszedzialaj@gmail.com";
+        String senderPassword = "javapliss123!";
+
+        // Ustawienia serwera SMTP
+        String smtpHost = "smtp.gmail.com";
+        int smtpPort = 587;
+
+
+        // Konfiguracja właściwości
+        Properties properties = new Properties();
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.smtp.host", smtpHost);
+        properties.put("mail.smtp.port", smtpPort);
+
+        // Utworzenie autentykatora
+        Authenticator authenticator = new Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(senderEmail, senderPassword.toCharArray());
+            }
+        };
+
+        // Utworzenie sesji
+        Session session = Session.getInstance(properties);
+
+
+        try {
+            // Utworzenie wiadomości e-mail
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(senderEmail));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipientEmail));
+            message.setSubject("Temat wiadomości");
+            message.setText("Treść wiadomości");
+
+            // Wysłanie wiadomości
+            Transport.send(message);
+
+            System.out.println("E-mail został wysłany pomyślnie.");
+        } catch (MessagingException e) {
+            System.out.println("Wystąpił błąd podczas wysyłania e-maila: " + e.getMessage());
+        }
     }
 
     private void handleAdvertisementRemove(HttpServletRequest request, HttpServletResponse response) throws IOException {
